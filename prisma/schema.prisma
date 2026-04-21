@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tabungan {
+  idTabungan      Int      @id @default(autoincrement())
+  namaTabungan    String
+  totalTabungan   Int      @default(0)
+  pemilikTabungan Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  User            User     @relation(fields: [pemilikTabungan], references: [userId])
+}
+
+model User {
+  userId    Int        @id @default(autoincrement())
+  username  String     
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Tabungan  Tabungan[]
+}
