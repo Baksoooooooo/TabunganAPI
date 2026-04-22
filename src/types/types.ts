@@ -1,9 +1,11 @@
 export interface Tabungan {
-  readonly idTabungan?: number;
+  readonly idTabungan: number;
   namaTabungan: string;
   totalTabungan: number;
   pemilikTabungan: number;
 }
+
+export type CreateTabungan = Omit<Tabungan, "idTabungan">;
 
 export interface User {
   readonly userId: number;
