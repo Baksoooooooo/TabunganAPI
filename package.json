@@ -18,13 +18,15 @@
     "@prisma/client": "^7.7.0",
     "@types/bcrypt": "^6.0.0",
     "@types/pg": "^8.20.0",
+    "@types/validator": "^13.15.10",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "extensionless": "^2.0.6",
     "pg": "^8.20.0",
     "prisma": "^7.7.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "validator": "^13.15.35"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

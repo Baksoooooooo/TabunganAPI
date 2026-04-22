@@ -2,6 +2,7 @@ import type { User, ApiResponse } from "@type/types.js";
 import { create, findByEmail } from "@models/UserModel.js";
 import type { Response, Request } from "express";
 import bcrypt from "bcrypt";
+import isEmail from "validator/lib/isEmail";
 
 export const register = async (
   req: Request<Omit<User, "tabungan" | "id">>,
@@ -15,6 +16,12 @@ export const register = async (
         message: `Username, Email Dan Password Wajib diisi`,
       });
     }
+    if (!isEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: `Email Tidak Valid`,
+      });
+    }
     const existing: User | null = await findByEmail(email);
     if (existing) {
       return res.status(400).json({
@@ -22,7 +29,6 @@ export const register = async (
         message: `Email Sudah Terdaftar`,
       });
     }
-
     const hashPassword = await bcrypt.hash(password, 10);
     const user: User = await create({
       username,
