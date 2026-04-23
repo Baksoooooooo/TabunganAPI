@@ -16,9 +16,9 @@ router.use(AuthToken);
 router.get("/", getAllTabungan);
 router.get("/:id", getTabunganById);
 router.post("/", createTabungan);
-router.put("/deposit/:id", deposit);
-router.put("/rename/:id", renameTabungan);
-router.put("/reset/:id", resetTabungan);
+router.patch("/deposit/:id", deposit);
+router.patch("/rename/:id", renameTabungan);
+router.patch("/reset/:id", resetTabungan);
 router.delete("/delete/:id", HapusTabungan);
 
 export default router;
