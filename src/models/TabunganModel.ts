@@ -15,8 +15,11 @@ export const findByUser = async (userId: number): Promise<Tabungan[]> => {
 
 export const findById = async (
   idTabungan: number,
+  pemilikTabungan: number,
 ): Promise<Tabungan | null> => {
-  return await prisma.tabungan.findUnique({ where: { idTabungan } });
+  return await prisma.tabungan.findUnique({
+    where: { idTabungan, pemilikTabungan },
+  });
 };
 
 export const update = async (
