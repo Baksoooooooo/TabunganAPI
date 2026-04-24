@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/app.ts",
     "build": "tsc && tsc-alias",
-    "start": "node --import=extensionless/register dist/app.js"
+    "start": "node --import=extensionless/register dist/app.js",
+    "postinstall": "npx prisma migrate deploy && npx prisma generate"
   },
   "keywords": [],
   "author": "",

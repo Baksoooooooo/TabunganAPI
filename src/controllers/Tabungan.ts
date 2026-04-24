@@ -38,7 +38,11 @@ export const getAllTabungan = async (
     const userId = req.user?.userId;
     const tabungan = await Model.findByUser(userId!);
     if (tabungan.length === 0) {
-      throw new AppError(`Kamu Belum punya tabungan`, 400);
+      return res.status(200).json({
+        success: true,
+        data: tabungan,
+        message: `Kamu belum mempunyai tabungan`,
+      });
     }
     res.status(200).json({
       success: true,
@@ -57,7 +61,7 @@ export const getTabunganById = async (
 ) => {
   try {
     const userId = req.user?.userId;
-    const tabunganId = parseInt(req.params.id);
+    const tabunganId = Number(req.params.id);
     const tabungan = await Model.findById(tabunganId, userId!);
     if (!tabungan) {
       throw new AppError(
@@ -82,7 +86,7 @@ export const deposit = async (
 ) => {
   try {
     const userId = req.user?.userId;
-    const tabunganId = parseInt(req.params.id);
+    const tabunganId = Number(req.params.id);
     const existing = await Model.findById(tabunganId, userId!);
     if (!existing) {
       throw new AppError(
@@ -91,11 +95,17 @@ export const deposit = async (
       );
     }
     const { totalDeposit } = req.body;
-    if (!totalDeposit) {
+    if (totalDeposit === null || totalDeposit === undefined) {
       throw new AppError(`Harap isi totalDeposit`, 400);
     }
-    const totalTabungan = (existing.totalTabungan += totalDeposit);
-    const tabungan = await Model.update(tabunganId, { totalTabungan });
+    if (typeof totalDeposit !== "number") {
+      throw new AppError(`totalDeposit Wajib angka`, 400);
+    }
+    if (totalDeposit <= 0) {
+      throw new AppError(`TotalDeposit harus diatas 0`, 400);
+    }
+    const totalTabungan = existing.totalTabungan + totalDeposit;
+    const tabungan = await Model.update(tabunganId, userId!, { totalTabungan });
     res.status(200).json({
       success: true,
       data: tabungan,
@@ -113,7 +123,7 @@ export const renameTabungan = async (
 ) => {
   try {
     const userId = req.user?.userId;
-    const tabunganId = parseInt(req.params.id);
+    const tabunganId = Number(req.params.id);
     const existing = await Model.findById(tabunganId, userId!);
     if (!existing) {
       throw new AppError(
@@ -125,7 +135,7 @@ export const renameTabungan = async (
     if (!namaTabungan) {
       throw new AppError(`Nama tabungan harus diisi`, 400);
     }
-    const tabungan = await Model.update(tabunganId, { namaTabungan });
+    const tabungan = await Model.update(tabunganId, userId!, { namaTabungan });
     res.status(200).json({
       success: true,
       data: tabungan,
@@ -143,7 +153,7 @@ export const resetTabungan = async (
 ) => {
   try {
     const userId = req.user?.userId;
-    const tabunganId = parseInt(req.params.id);
+    const tabunganId = Number(req.params.id);
     const existing = await Model.findById(tabunganId, userId!);
     if (!existing) {
       throw new AppError(
@@ -151,7 +161,9 @@ export const resetTabungan = async (
         404,
       );
     }
-    const tabungan = await Model.update(tabunganId, { totalTabungan: 0 });
+    const tabungan = await Model.update(tabunganId, userId!, {
+      totalTabungan: 0,
+    });
     res.status(200).json({
       success: true,
       data: tabungan,
@@ -162,14 +174,14 @@ export const resetTabungan = async (
   }
 };
 // Delete Tabungan
-export const HapusTabungan = async (
+export const removeTabungan = async (
   req: AuthRequest,
   res: Response<Omit<ApiResponse<null>, "data">>,
   next: NextFunction,
 ) => {
   try {
     const userId = req.user?.userId;
-    const tabunganId = parseInt(req.params.id);
+    const tabunganId = Number(req.params.id);
     const existing = await Model.findById(tabunganId, userId!);
     if (!existing) {
       throw new AppError(
@@ -177,7 +189,7 @@ export const HapusTabungan = async (
         404,
       );
     }
-    await Model.remove(tabunganId);
+    await Model.remove(tabunganId, userId!);
     res.status(200).json({
       success: true,
       message: `tabungan: ${existing.namaTabungan} berhasil dihapus`,

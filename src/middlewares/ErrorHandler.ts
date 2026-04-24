@@ -20,5 +20,9 @@ const ErrorHandler = (
       message: err.message,
     });
   }
+  return res.status(500).json({
+    success: false,
+    message: `Terjadi kesalahan yang tidak diketahui`,
+  });
 };
 export default ErrorHandler;

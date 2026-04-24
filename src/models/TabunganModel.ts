@@ -24,11 +24,17 @@ export const findById = async (
 
 export const update = async (
   idTabungan: number,
+  pemilikTabungan: number,
   data: Partial<Tabungan>,
 ): Promise<Tabungan> => {
-  return await prisma.tabungan.update({ where: { idTabungan }, data });
+  return await prisma.tabungan.update({
+    where: { idTabungan, pemilikTabungan },
+    data,
+  });
 };
 
-export const remove = async (idTabungan: number) => {
-  return await prisma.tabungan.delete({ where: { idTabungan } });
+export const remove = async (idTabungan: number, pemilikTabungan: number) => {
+  return await prisma.tabungan.delete({
+    where: { idTabungan, pemilikTabungan },
+  });
 };

@@ -30,7 +30,7 @@ export const register = async (
       password: hashPassword,
     });
     const { password: _, ...data } = user;
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       data,
       message: "Registrasi Berhasil",
