@@ -1,10 +1,10 @@
 import type { Request } from "express";
-import type { user, tabungan } from "../generated/prisma/client";
+import type * as prismaType from "../generated/prisma/client";
 import type { JwtPayload } from "jsonwebtoken";
 
-export type Tabungan = Omit<tabungan, "createdAt" | "updatedAt">;
+export type Tabungan = Omit<prismaType.Tabungan, "createdAt" | "updatedAt">;
 export type CreateTabungan = Pick<Tabungan, "namaTabungan" | "pemilikTabungan">;
-export type User = Omit<user, "createdAt" | "updatedAt">;
+export type User = Omit<prismaType.User, "createdAt" | "updatedAt">;
 export type CreateUser = Omit<User, "tabungan" | "userId">;
 
 export interface SuccessResponse<T> {
