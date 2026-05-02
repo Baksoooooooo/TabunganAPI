@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import userRouter from "@routes/userRouter";
 import tabunganRouter from "@routes/tabunganRouter";
 import NotFound from "@middlewares/NotFound";
@@ -7,6 +8,11 @@ import ErrorHandler from "@middlewares/ErrorHandler";
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
+app.use(
+  cors({
+    origin: "*",
+  }),
+);
 app.use(express.json());
 app.use("/user", userRouter);
 app.use("/tabungan", tabunganRouter);
